@@ -1,3 +1,4 @@
+#include "Exceptions.hpp"
 #include "TcpSocket.hpp"
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -139,8 +140,11 @@ namespace Socket {
 		socklen_t addressSize = sizeof(sockaddr_storage);
 		DEBUG("?");
 		int newSock;
-		if ((newSock = ::accept(mSock, (sockaddr*)&address.s, &addressSize)) == -1)
+		if ((newSock = ::accept(mSock, (sockaddr*)&address.s, &addressSize)) == -1) {
+			DEBUG(strerror(errno));
 			throw SocketAcceptException(strerror(errno));
+		}
+			
 
 		DEBUG("1 client accepted");
 

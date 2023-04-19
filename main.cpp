@@ -19,6 +19,7 @@ int main(int argc, char *argv[])
 		client = sock->accept();
 	} catch(std::exception &e) {
 		std::cout << e.what() << std::endl;
+		return;
 	}
 	// Welcoming the new user
 	client->send("Welcome !\n\f", 15, 0);
