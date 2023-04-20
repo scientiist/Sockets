@@ -14,25 +14,27 @@ int main(int argc, char *argv[])
 	Socket_p client;
 
 	try {
-		sock->bind(11170);
-		sock->listen(5);
-		client = sock->accept();
+		sock->Bind(42069);
+		sock->Listen(5);
+		client = sock->Accept();
 	} catch(std::exception &e) {
 		std::cout << e.what() << std::endl;
+		return;
 	}
 	// Welcoming the new user
-	client->send("Welcome !\n\f", 15, 0);
+	client->Send("Welcome !\n\f", 15, 0);
 	// Closing the listening socket, we want nobody else.
-	sock->close();
+	sock->Close();
 
 	char data[512];
 	memset(&data, 0, 512);
-	while (client->receive(data, sizeof data, 0))
+	while (client->Receive(data, sizeof data, 0))
 	{
-		client->send(data, sizeof data, 0);
+		std::cout << "[Recv] " << data << std::endl;
+		client->Send(data, sizeof data, 0);
 		memset(&data, 0, 512);
 	}
-	client->close();
+	client->Close();
 
 	return 0;
 }

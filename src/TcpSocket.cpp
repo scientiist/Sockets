@@ -1,3 +1,4 @@
+#include "Exceptions.hpp"
 #include "TcpSocket.hpp"
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -39,10 +40,7 @@ namespace Socket {
 
 		mSock = socket(mInfo->ai_family, mInfo->ai_socktype, 0);
 		if (mSock == -1)
-		{
-			SocketCreationException except(strerror(errno));
-			throw except;
-		}
+			throw SocketCreationException(strerror(errno));
 		// Socket successfully "opened"
 		mSockCreated = true;
 	}
@@ -56,11 +54,11 @@ namespace Socket {
 	TcpSocket::~TcpSocket()
 	{
 		if (!mClosed)
-			close();
+			Close();
 		freeaddrinfo(mInfo);
 	}
 
-	void TcpSocket::bind(int port)
+	void TcpSocket::Bind(int port)
 	{
 		if (mBound && mConnected)
 			throw SocketBindingException("Already bound!");
@@ -91,7 +89,7 @@ namespace Socket {
 		throw SocketBindingException("Can't bind to port");
 	}
 
-	void TcpSocket::connect(std::string address, int port)
+	void TcpSocket::Connect(std::string address, int port)
 	{
 		if (mConnected)
 			throw SocketConnectException("Already Connected!");
@@ -118,14 +116,14 @@ namespace Socket {
 		throw SocketConnectException("Can't connect to host");
 	}
 
-	void TcpSocket::listen(int maxQueue)
+	void TcpSocket::Listen(int maxQueue)
 	{
 		if (::listen(mSock, maxQueue) != 0)
 			throw SocketListenException(strerror(errno));
 		DEBUG("Listening...");
 	}
 
-	std::shared_ptr<TcpSocket> TcpSocket::accept()
+	std::shared_ptr<TcpSocket> TcpSocket::Accept()
 	{
 		DEBUG("Starting to accept");
 		union
@@ -135,12 +133,13 @@ namespace Socket {
 			sockaddr_in6 in6;
 			sockaddr_storage s;
 		} address;
-		DEBUG("?");
 		socklen_t addressSize = sizeof(sockaddr_storage);
-		DEBUG("?");
 		int newSock;
-		if ((newSock = ::accept(mSock, (sockaddr*)&address.s, &addressSize)) == -1)
+		if ((newSock = ::accept(mSock, (struct sockaddr*)0, (int*)0))==-1) {
+		//if ((newSock = ::accept(mSock, (sockaddr*)&address.s, &addressSize)) == -1) {
+			DEBUG(strerror(errno));
 			throw SocketAcceptException(strerror(errno));
+		}
 
 		DEBUG("1 client accepted");
 
@@ -157,7 +156,7 @@ namespace Socket {
 		return std::shared_ptr<TcpSocket>(new TcpSocket(newSock, info, true, false));
 	}
 
-	void TcpSocket::send(const char *data, unsigned int length, int flags)
+	void TcpSocket::Send(const char *data, unsigned int length, int flags)
 	{
 		const char * buff = data;
 		int status = 0;
@@ -176,7 +175,7 @@ namespace Socket {
 		}
 	}
 
-	bool TcpSocket::receive(char* msg, int len, int flags)
+	bool TcpSocket::Receive(char* msg, int len, int flags)
 	{
 		int status;
 		if ((status = ::recv(mSock, msg, len, flags)) == -1)
@@ -187,7 +186,7 @@ namespace Socket {
 		return true;
 	}
 
-	void TcpSocket::close()
+	void TcpSocket::Close()
 	{
 		if (::close(mSock) == -1)
 			throw SocketCloseException(strerror(errno));
