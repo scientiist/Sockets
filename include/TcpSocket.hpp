@@ -10,7 +10,7 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
-#include "IPAddress.hpp"
+#include <IPAddress.hpp>
 
 #ifndef INPORT_ANY
 #define INPORT_ANY
@@ -27,6 +27,9 @@ namespace Socket {
 		TcpSocket(const TcpSocket &socket) = default;
 		TcpSocket &operator=(const TcpSocket &socket) = delete;
 		void Bind(int port);
+		void BindAny();
+		void BindAny(int&portno);
+		void Connect(const IPAddress& ipaddr);
 		void Connect(std::string address, int port);
 		void Listen(int maxQueue);
 		std::shared_ptr<TcpSocket> Accept();

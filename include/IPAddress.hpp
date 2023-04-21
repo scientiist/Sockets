@@ -9,10 +9,17 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
+#include "Exceptions.hpp"
+
 namespace Socket
 {
+
+	typedef struct sockaddr_in sockaddr_in_t;
+	typedef struct sockaddr sockaddr_t;
 	struct IPAddress
 	{
+		std::array<uint8_t, 4> octets{};
+		uint16_t port{};
 	public:
 		static IPAddress Any(uint16_t portno) 		{ return IPAddress{INADDR_ANY, portno};}
 		static IPAddress Loopback(uint16_t portno)  { return IPAddress{INADDR_LOOPBACK, portno};}
@@ -24,9 +31,8 @@ namespace Socket
 		IPAddress(const sockaddr_in_t& addr_in);		
 		operator sockaddr_in_t() const;
 		const uint8_t& operator[](size_t octet) const;
-		uint8_t& operator[](size_t octet);
-		bool operator==(const IPAddress& other) const;
-		bool operator !=(const IPAddress& other) const;
+		bool operator == (const IPAddress& other) const;
+		bool operator != (const IPAddress& other) const;
 		std::string addr_string() const;
 		std::string port_string() const;
 		std::string to_string() const;
@@ -37,7 +43,7 @@ namespace Socket
 
 	bool IPAddress::operator==(const IPAddress& other) const
 	{
-		return this->octets = other.octets && this->port == other.port;
+		return this->octets == other.octets && this->port == other.port;
 	}
 
 	bool IPAddress::operator !=(const IPAddress& other) const
@@ -49,11 +55,6 @@ namespace Socket
 	{
 		return octets[octet];
 	}
-
-	uint8_t& IPAddress::operator[](size_t octet) const
-	{
-		return octets[octet];
-	}
 	
 
 	IPAddress::IPAddress(uint32_t ipaddr, uint16_t portno)
@@ -62,13 +63,13 @@ namespace Socket
 		port = portno;
 	}
 
-	IPAddress::IPAddress(const char* ipaddr)
+	IPAddress::IPAddress(const std::string& ipaddr, uint16_t portno)
 	{
 		int ret = ::inet_pton(AF_INET, ipaddr.c_str(), (uint32_t*)octets.data());
 		if (ret > 0) {
 			port = portno;
 		} else {
-			throw InvalidAddressException(errno);
+			throw SocketException(strerror(errno));
 		}
 	}
 
@@ -86,7 +87,7 @@ namespace Socket
 		port = ntohs(addr_in.sin_port);
 	}
 
-	operator IPAddress::sockaddr_in_t() const
+	IPAddress::operator sockaddr_in_t() const
 	{
 		sockaddr_in_t addr_in;
 		std::memset(&addr_in, 0, sizeof(addr_in));

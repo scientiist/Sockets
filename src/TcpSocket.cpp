@@ -135,7 +135,7 @@ namespace Socket {
 		} address;
 		socklen_t addressSize = sizeof(sockaddr_storage);
 		int newSock;
-		if ((newSock = ::accept(mSock, (struct sockaddr*)0, (int*)0))==-1) {
+		if ((newSock = ::accept(mSock, (struct sockaddr*)0, (unsigned int*)0))==-1) {
 		//if ((newSock = ::accept(mSock, (sockaddr*)&address.s, &addressSize)) == -1) {
 			DEBUG(strerror(errno));
 			throw SocketAcceptException(strerror(errno));

@@ -9,11 +9,11 @@ namespace Socket {
 
 	class SocketException : public std::exception {
 	protected:
-		char * message;
+		const char * message;
 	public:
 		SocketException(std::string msg) : message(msg.c_str()) {}
-		SocketException(char *msg) : message(msg) {}
-		char * what() {
+		SocketException(const char *msg) : message(msg) {}
+		const char * what() {
 			return message;
 		}	
 	};
