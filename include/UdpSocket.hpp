@@ -13,32 +13,32 @@ namespace Socket
 	typedef std::vector<uint8_t> msg_t;
 	class UdpSocket {
 	public:
-		UdpSocket();
+		UdpSocket() {}
 		UdpSocket(int family, int flags);
 		UdpSocket(int socket, addrinfo info, bool connected, bool bound);
 		virtual ~UdpSocket();
 	
 		UdpSocket(const UdpSocket &socket) = default;
-		UdpSocket &operator=(const TcpSocket &socket) = delete;
+		UdpSocket &operator=(const UdpSocket &socket) = delete;
 		void Open();
 		int Close();
 		bool IsClosed() const { return sock < 0;}
-		void Bind(const IPAddress& ipaddr);
-		int Bind(uint16_t portno);
-		int BindAny();
-		int BindAny(uint16_t& portno);
-		int Connect(const IPAddress& ipaddr);
-		int Connect(uint16_t portno);
+		void Bind(const IPAddress& ipAddress);
+		void Bind(uint16_t portno);
+		void BindAny();
+        void BindAny(uint16_t& portno);
+        void Connect(const IPAddress& ipaddr);
+        void Connect(uint16_t portno);
 			
-		IPAddress GetSelfIP() const {return self_addr;}
-		IPAddress GetPeerIP() const {return peer_addr;}
-		template <typename T, typename = typename std::enable_if<sizeof(typename T::value_type) == sizeof(uint8_t)>::type>
-		int Send(const T& message, const IPAddress& ipaddr) const;	
-		template <typename T, typename = typename
-				std::enable_if<sizeof(typename T::value_type) == sizeof(uint8_t)>::type>
+		[[nodiscard]] IPAddress GetSelfIP() const {return self_addr;}
+		[[nodiscard]] IPAddress GetPeerIP() const {return peer_addr;}
+        public:
+        template <typename T>
+		int Send(const T& message, const IPAddress& ipaddr) const;
+        template <typename T>
 		int Receive(T& message, IPAddress& ipaddr) const;
 		int Broadcast(int opt) const;
-		int Interrupt() const;
+		void Interrupt() const;
 	private:
 		int sock{-1};
 		sockaddr_in_t self_addr{};

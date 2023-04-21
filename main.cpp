@@ -1,4 +1,4 @@
-#include "TcpSocket.hpp"
+#include "include/TcpSocket.hpp"
 
 #include <iostream>
 #include <exception>
@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
 		client = sock->Accept();
 	} catch(std::exception &e) {
 		std::cout << e.what() << std::endl;
-		return;
+		return -1;
 	}
 	// Welcoming the new user
 	client->Send("Welcome !\n\f", 15, 0);

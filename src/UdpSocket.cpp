@@ -36,44 +36,40 @@ namespace Socket
 		return 0;
 	}
 
-	void UdpSocket::Bind(uint16_t portno)
+	void UdpSocket::Bind(const IPAddress& ipAddress)
 	{
-		self_addr = ipaddr;
+		self_addr = ipAddress;
 		self_addr_len = sizeof(self_addr);
 		int opt = 1;
 		int ret = ::setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, (const char*)&opt, sizeof(opt));
 		if (ret < 0) {
-			throw SocketSetOptionException(strerror(errno));
+			throw SocketException(strerror(errno));
 		}
 		ret = ::bind(sock, (sockaddr_t*)&self_addr, self_addr_len);
 		if (ret < 0) {
-			throw SocketBindingError(strerror(errno));
+			throw SocketBindingException(strerror(errno));
 		}
 		ret = ::getsockname(sock, (sockaddr_t*)&self_addr, &self_addr_len);
 		if (ret < 0) {
-			throw SocketGetNameError(strerror(errno));
+			throw SocketException(strerror(errno));
 		}
 	}
 
-	int UdpSocket::Bind(uint16_t portno)
+	void UdpSocket::Bind(uint16_t portno)
 	{
 		auto ipaddr = IPAddress::Any(portno);
-		return this->Bind(ipaddr);
+		this->Bind(ipaddr);
 	}
-	int UdpSocket::BindAny()
+	void UdpSocket::BindAny()
 	{
-		return this->Bind(INPORT_ANY);
+		this->Bind(INPORT_ANY);
 	}
-	int UdpSocket::BindAny(uint16_t& portno)
+	void UdpSocket::BindAny(uint16_t& portno)
 	{
-		int ret = this->Bind(INPORT_ANY);
-		if (ret < 0) {
-			return ret;
-		}
+        this->Bind(INPORT_ANY);
 		portno = IPAddress{self_addr}.port;
-		return 0;
 	}
-	int UdpSocket::Connect(const IPAddress& ipaddr)
+	void UdpSocket::Connect(const IPAddress& ipaddr)
 	{
 		peer_addr = ipaddr;
 		peer_addr_len = sizeof(peer_addr);
@@ -82,12 +78,13 @@ namespace Socket
 			throw SocketConnectException(strerror(errno));
 		}
 	}
-	int UdpSocket::Connect(uint16_t portno)
+	void UdpSocket::Connect(uint16_t portno)
 	{
 		auto ipaddr = IPAddress::Loopback(portno);
-		return this->Connect(ipaddr);
+        this->Connect(ipaddr);
 	}
-	template <typename T, typename = typename std::enable_if<sizeof(typename T::value_type) == sizeof(uint8_t)>::type>
+
+	template <typename T>
 	int UdpSocket::Send(const T& message, const IPAddress& ipaddr) const
 	{
 		sockaddr_in_t addr_in = ipaddr;
@@ -100,8 +97,8 @@ namespace Socket
 		}
 		return ret;
 	}
-	template <typename T, typename = typename
-		std::enable_if<sizeof(typename T::value_type) == sizeof(uint8_t)>::type>
+
+	template <typename T>
 	int UdpSocket::Receive(T& message, IPAddress& ipaddr) const
 	{
 		sockaddr_in_t addr_in;
@@ -125,11 +122,11 @@ namespace Socket
 		return 0;
 	}
 
-	int UdpSocket::Interrupt() const
+	void UdpSocket::Interrupt() const
 	{
 		uint16_t portno = IPAddress{self_addr}.port;
 		auto ipaddr = IPAddress::Loopback(portno);
-		return this->Send(msg_t{}. ipaddr);
+		this->Send(msg_t{}, ipaddr);
 	}
 	
 }
