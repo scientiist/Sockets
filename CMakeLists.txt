@@ -5,7 +5,7 @@ project(Sockets)
 file(GLOB SOURCES src/*.cpp)
 
 include_directories(include)
-add_library(${PROJECT_NAME} SHARED ${SOURCES} )
+add_library(${PROJECT_NAME} SHARED ${SOURCES} include/HttpClient.hpp)
 
 set(CMAKE_CXX_FLAGS "-pedantic -Wall -Wextra")
 
