@@ -1,0 +1,7 @@
+file(GLOB_RECURSE TEST_SRCS "*.cpp")
+add_executable(Test ${TEST_SRCS})
+target_link_libraries(Test PUBLIC Sockets)
+find_package(GTest REQUIRED)
+target_link_libraries(Test PRIVATE GTest::gtest)
+include_directories("include")
+add_test(NAME "Test" COMMAND Test)
