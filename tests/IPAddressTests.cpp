@@ -37,6 +37,12 @@ TEST(IPAddressTest, IPAddress_Constructor_Invalid_Address)
     }, std::exception);
 }
 
+TEST(IPAddressTest, IPAddress_Resolve)
+{
+    Socket::IPAddress  addr = Socket::IPAddress::Resolve("www.google.com", 80);
+
+}
+
 TEST(IPAddressTest, IPAddress_Operator_Equality)
 {
     Socket::IPAddress a("127.0.0.1", 42069);

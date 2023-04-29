@@ -53,7 +53,7 @@ namespace Socket {
 
 	TcpSocket::~TcpSocket()
 	{
-		if (!mClosed)
+		if (mSockCreated && !mClosed)
 			Close();
 		freeaddrinfo(mInfo);
 	}

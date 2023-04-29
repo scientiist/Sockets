@@ -76,4 +76,10 @@ namespace Socket
         return this->addr_string() + ":" + this->port_string();
     }
 
+    IPAddress IPAddress::Resolve(const std::string &uri, uint16_t port) {
+        struct hostent *he = gethostbyname(uri.c_str());
+        char *ip = inet_ntoa(*(struct in_addr*)he->h_addr_list[0]);
+        return IPAddress(std::string(ip), port);
+    }
+
 }
