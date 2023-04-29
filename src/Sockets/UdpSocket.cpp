@@ -1,4 +1,4 @@
-#include "UdpSocket.hpp"
+#include "Sockets/UdpSocket.hpp"
 
 namespace Socket
 {
@@ -36,15 +36,8 @@ namespace Socket
 		return 0;
 	}
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
+
 	void UdpSocket::Bind(const IPAddress& ipAddress)
-=======
-	void UdpSocket::Bind(IPAddress& ipaddr)
->>>>>>> Stashed changes
-=======
-	void UdpSocket::Bind(IPAddress& ipaddr)
->>>>>>> Stashed changes
 	{
 		self_addr = ipAddress;
 		self_addr_len = sizeof(self_addr);
@@ -74,20 +67,10 @@ namespace Socket
 	}
 	void UdpSocket::BindAny(uint16_t& portno)
 	{
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
+
         this->Bind(INPORT_ANY);
 		portno = IPAddress{self_addr}.port;
-=======
-		this->Bind(INPORT_ANY);
-		portno = IPAddress{self_addr}.port;
-		//return 0;
->>>>>>> Stashed changes
-=======
-		this->Bind(INPORT_ANY);
-		portno = IPAddress{self_addr}.port;
-		//return 0;
->>>>>>> Stashed changes
+
 	}
 	void UdpSocket::Connect(const IPAddress& ipaddr)
 	{
@@ -101,15 +84,9 @@ namespace Socket
 	void UdpSocket::Connect(uint16_t portno)
 	{
 		auto ipaddr = IPAddress::Loopback(portno);
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
+
         this->Connect(ipaddr);
-=======
-		this->Connect(ipaddr);
->>>>>>> Stashed changes
-=======
-		this->Connect(ipaddr);
->>>>>>> Stashed changes
+
 	}
 
 	template <typename T>

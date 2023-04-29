@@ -1,6 +1,6 @@
 #pragma once
 
-#include <IPAddress.hpp>
+#include <Sockets/IPAddress.hpp>
 
 #ifndef INPORT_ANY
 #define INPORT_ANY 0
@@ -23,25 +23,13 @@ namespace Socket
 		void Open();
 		int Close();
 		bool IsClosed() const { return sock < 0;}
-<<<<<<< Updated upstream
 		void Bind(const IPAddress& ipAddress);
 		void Bind(uint16_t portno);
 		void BindAny();
         void BindAny(uint16_t& portno);
         void Connect(const IPAddress& ipaddr);
         void Connect(uint16_t portno);
-=======
-		void Bind(const IPAddress& ipaddr);
-		void Bind(uint16_t portno);
-		void BindAny();
-		void BindAny(uint16_t& portno);
-		void Connect(const IPAddress& ipaddr);
-		void Connect(uint16_t portno);
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-			
+
 		[[nodiscard]] IPAddress GetSelfIP() const {return self_addr;}
 		[[nodiscard]] IPAddress GetPeerIP() const {return peer_addr;}
         public:

@@ -10,7 +10,7 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
-#include <IPAddress.hpp>
+#include <Sockets/IPAddress.hpp>
 
 #ifndef INPORT_ANY
 #define INPORT_ANY

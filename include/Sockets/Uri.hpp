@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <Sockets/IPAddress.hpp>
 
 namespace Socket
 {
@@ -12,6 +13,7 @@ namespace Socket
         std::string const& GetUser() const { return user_;}
         std::string const& GetHost() const { return host_;}
         uint16_t GetPort()           const { return port_;}
+        IPAddress GetIPAddress() const;
     private:
         std::string user_;
         std::string host_;
@@ -33,6 +35,9 @@ namespace Socket
 
         void SchemeIs(std::string const& scheme);
         void AuthorityIs(std::string const& authority);
-
+    private:
+        std::string scheme_;
+        Auth authority_;
+        std::string path_;
     };
 }

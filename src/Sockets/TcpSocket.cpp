@@ -1,5 +1,5 @@
-#include "Exceptions.hpp"
-#include "TcpSocket.hpp"
+#include "Sockets/Exceptions.hpp"
+#include "Sockets/TcpSocket.hpp"
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netdb.h>
