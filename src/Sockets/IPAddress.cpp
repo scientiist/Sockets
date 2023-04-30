@@ -1,4 +1,5 @@
 #include "Sockets/IPAddress.hpp"
+#include <Sockets/Exceptions.hpp>
 
 namespace Socket
 {
@@ -78,6 +79,12 @@ namespace Socket
 
     IPAddress IPAddress::Resolve(const std::string &uri, uint16_t port) {
         struct hostent *he = gethostbyname(uri.c_str());
+
+        if (he == nullptr)
+        {
+            throw BadUriException("");
+        }
+
         char *ip = inet_ntoa(*(struct in_addr*)he->h_addr_list[0]);
         return IPAddress(std::string(ip), port);
     }

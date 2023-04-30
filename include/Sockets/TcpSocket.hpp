@@ -13,7 +13,7 @@
 #include <Sockets/IPAddress.hpp>
 
 #ifndef INPORT_ANY
-#define INPORT_ANY
+#define INPORT_ANY 0
 #endif
 
 namespace Socket {
@@ -26,11 +26,11 @@ namespace Socket {
 
 		TcpSocket(const TcpSocket &socket) = default;
 		TcpSocket &operator=(const TcpSocket &socket) = delete;
-		void Bind(int port);
+		void Bind(uint16_t port);
 		void BindAny();
-		void BindAny(int&portno);
+		void BindAny(uint16_t&portno);
 		void Connect(const IPAddress& ipaddr);
-		void Connect(std::string address, int port);
+		void Connect(std::string address, uint16_t port);
 		void Listen(int maxQueue);
 		std::shared_ptr<TcpSocket> Accept();
 		void Send(const char *data, unsigned int length, int flags);

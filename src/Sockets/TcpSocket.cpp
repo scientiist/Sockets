@@ -58,7 +58,7 @@ namespace Socket {
 		freeaddrinfo(mInfo);
 	}
 
-	void TcpSocket::Bind(int port)
+	void TcpSocket::Bind(uint16_t port)
 	{
 		if (mBound && mConnected)
 			throw SocketBindingException("Already bound!");
@@ -89,7 +89,21 @@ namespace Socket {
 		throw SocketBindingException("Can't bind to port");
 	}
 
-	void TcpSocket::Connect(std::string address, int port)
+    void TcpSocket::BindAny() {
+        Bind(INPORT_ANY);
+    }
+    void TcpSocket::BindAny(uint16_t& port)
+    {
+        this->Bind(INPORT_ANY);
+        //portno = port;
+    }
+
+
+    void TcpSocket::Connect(const IPAddress &ipaddr) {
+        Connect(ipaddr.addr_string(), ipaddr.port);
+    }
+
+	void TcpSocket::Connect(std::string address, uint16_t port)
 	{
 		if (mConnected)
 			throw SocketConnectException("Already Connected!");

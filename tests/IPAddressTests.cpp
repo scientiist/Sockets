@@ -2,7 +2,6 @@
 #include <Sockets/IPAddress.hpp>
 #include <Sockets/Exceptions.hpp>
 
-
 TEST(IPAddressTest, IPAddress_Constructor_Default)
 {
     Socket::IPAddress addr;
@@ -41,6 +40,13 @@ TEST(IPAddressTest, IPAddress_Resolve)
 {
     Socket::IPAddress  addr = Socket::IPAddress::Resolve("www.google.com", 80);
 
+}
+
+TEST(IPAddressTest, IPAddress_Resolve_Invalid)
+{
+    ASSERT_THROW({
+        Socket::IPAddress addr = Socket::IPAddress::Resolve("GOOGLEPLS", 80);
+    }, std::exception);
 }
 
 TEST(IPAddressTest, IPAddress_Operator_Equality)

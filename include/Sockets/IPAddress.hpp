@@ -13,7 +13,6 @@
 
 namespace Socket
 {
-
 	typedef struct sockaddr_in sockaddr_in_t;
 	typedef struct sockaddr sockaddr_t;
 	struct IPAddress

@@ -11,12 +11,18 @@ namespace Socket {
 	protected:
 		const char * message;
 	public:
+        SocketException(const std::string& msg) : message(msg.c_str()) {}
 		SocketException(std::string msg) : message(msg.c_str()) {}
 		SocketException(const char *msg) : message(msg) {}
 		const char * what() {
 			return message;
 		}	
 	};
+
+    class BadUriException : public SocketException {
+    public:
+        BadUriException(char *msg) : SocketException{msg} {}
+    };
 	
 	class SocketBindingException : public SocketException {
 	public:

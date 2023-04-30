@@ -69,7 +69,7 @@ namespace Socket
 	{
 
         this->Bind(INPORT_ANY);
-		portno = IPAddress{self_addr}.port;
+		//portno = IPAddress{self_addr}.port;
 
 	}
 	void UdpSocket::Connect(const IPAddress& ipaddr)
