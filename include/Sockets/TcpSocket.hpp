@@ -4,9 +4,19 @@
 #include <string>
 #include <netdb.h>
 #include <memory>
+#include <cstring>
+#include <arpa/inet.h>
+#include <netinet/in.h>
+#include <sys/socket.h>
+#include <unistd.h>
+
+#include <Sockets/IPAddress.hpp>
+
+#ifndef INPORT_ANY
+#define INPORT_ANY 0
+#endif
 
 namespace Socket {
-	
 	class TcpSocket {
 	public:
 		TcpSocket();
@@ -16,15 +26,18 @@ namespace Socket {
 
 		TcpSocket(const TcpSocket &socket) = default;
 		TcpSocket &operator=(const TcpSocket &socket) = delete;
-		void bind(int port);
-		void connect(std::string address, int port);
-		void listen(int maxQueue);
-		std::shared_ptr<TcpSocket> accept();
-		void send(const char *data, unsigned int length, int flags);
+		void Bind(uint16_t port);
+		void BindAny();
+		void BindAny(uint16_t&portno);
+		void Connect(const IPAddress& ipaddr);
+		void Connect(std::string address, uint16_t port);
+		void Listen(int maxQueue);
+		std::shared_ptr<TcpSocket> Accept();
+		void Send(const char *data, unsigned int length, int flags);
 		// Receive data (blocking)
 		// @return true if socket is still open, false otherwise
-		bool receive(char* msg, int len, int flags);
-		void close();
+		bool Receive(char* msg, int len, int flags);
+		void Close();
 	private:
 		void setInfo(int port);
 		void setInfo(std::string address, int port);
