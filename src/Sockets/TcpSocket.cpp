@@ -1,5 +1,5 @@
-#include "Sockets/Exceptions.hpp"
-#include "Sockets/TcpSocket.hpp"
+#include <Sockets/Exceptions.hpp>
+#include <Sockets/TcpSocket.hpp>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netdb.h>
@@ -153,7 +153,6 @@ namespace Socket {
 		//if ((newSock = ::accept(mSock, (sockaddr*)&address.s, &addressSize)) == -1) {
 			DEBUG(strerror(errno));
 			throw SocketAcceptException(strerror(errno));
-		}
 
 		DEBUG("1 client accepted");
 
